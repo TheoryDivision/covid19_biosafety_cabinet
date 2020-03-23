@@ -1,0 +1,35 @@
+---
+title: "UV PPE Data Analysis"
+output: html_document
+---
+
+```{r}
+library(dplyr)
+library(stringr)
+library(readr)
+
+
+import_data_set <- function(filenameglob) {
+  fileNames <- Sys.glob(filenameglob)
+  df <- data.frame()
+  for (file in fileNames) {
+    temp <- read_csv(file, col_names = FALSE)
+    temp$filename <- file
+    df <- rbind(df, temp)
+  }
+  return(df)
+}
+
+df <- import_data_set("Downloads/bsc/Archive 2/*/*.csv")
+df <- df %>% group_by(filename) %>% summarise(mean = mean(X1), min=min(X1), max=max(X1))
+df$on <- df$filename %>% str_extract("all_...") %>% str_replace("all_", "") %>% str_replace("/","")
+df$y <- df$filename %>% str_extract("_[:digit:][:digit:]") %>% str_sub(3,3)
+df$x <- df$filename %>% str_extract("_[:digit:][:digit:]") %>% str_sub(2,2)
+df$hood <- df$filename %>% str_extract("/h[:digit:]") %>% str_extract("[:digit:]")
+df$sensor <- df$filename %>% str_extract("uv_data[:digit:]") %>% str_extract("[:digit:]")
+df$sensor <- df$sensor %>% recode("1"="bottom", "2"="middle", "3"="top")
+
+ggplot(data=df %>% filter(on=="on")) + geom_raster(aes(x=x,y=y,fill=mean)) + facet_wrap(~sensor) + theme_classic() + scale_fill_continuous(type = "viridis")
+
+
+```
