@@ -9,3 +9,4 @@
 - **bsc_spatial.html**: An html-rendered version of the corresponding Rmarkdown file
 - **bsc_data.ipynb**: Some preliminary python analysis code
 - **fig.ipynb**: Calculations on survival of different pathogens over varying UV intensity and temporal analysis of our data
+- **PPE_UV_Manuscript.pdf**: Preliminary manuscript on this work
