@@ -81,7 +81,7 @@ And now some calculations for the paper
 
 ```{r message=FALSE}
 
-math_df <- init_df
+math_df <- init_df 
 
 # Determine metadata from filepath
 math_df$on <- math_df$filename %>% str_extract("all_...") %>% str_replace("all_", "") %>% str_replace("/","")
@@ -90,7 +90,14 @@ math_df$x <- math_df$filename %>% str_extract("_[:digit:][:digit:]") %>% str_sub
 math_df$hood <- math_df$filename %>% str_extract("/h[:digit:]") %>% str_extract("[:digit:]")
 math_df$sensor <- math_df$filename %>% str_extract("uv_data[:digit:]") %>% str_extract("[:digit:]")
 
+math_df <- math_df %>% filter(on=="on")
+
 # Do the math to figure out the lowest ratio of max positional radition to lowest.
 math_df %>% filter(X1 > max(X1)/2) %>% group_by(hood,x,y) %>% summarise(median=median(X1)) %>% group_by(hood) %>% summarise(max(median)/min(median))
 
+# Calculate summary statistics across entire dataset
+mean((math_df %>% filter(X1 > max(X1)/2))$X1)
+min((math_df %>% filter(X1 > max(X1)/2))$X1)
+max((math_df %>% filter(X1 > max(X1)/2))$X1)
+sd((math_df %>% filter(X1 > max(X1)/2))$X1)
 ```
