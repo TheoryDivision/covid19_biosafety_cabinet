@@ -3,33 +3,94 @@ title: "UV PPE Data Analysis"
 output: html_document
 ---
 
-```{r}
+First lets do some setup and load in the data
+
+```{r, message=FALSE}
+# Load libraries
 library(dplyr)
 library(stringr)
 library(readr)
+library(ggplot2)
 
-
+# Function for pulling all the data in
 import_data_set <- function(filenameglob) {
   fileNames <- Sys.glob(filenameglob)
   df <- data.frame()
   for (file in fileNames) {
     temp <- read_csv(file, col_names = FALSE)
     temp$filename <- file
-    df <- rbind(df, temp)
+    
+    # The data when the lights were on start with 0s that we have to remove
+    if (str_detect(file, "all_on")) {
+      df <- rbind(df, slice(temp,100:n()) )  
+    } else {
+      df <- rbind(df, temp )
+    }
+    
   }
   return(df)
 }
 
-df <- import_data_set("Downloads/bsc/Archive 2/*/*.csv")
-df <- df %>% group_by(filename) %>% summarise(mean = mean(X1), min=min(X1), max=max(X1))
+
+# This script assumes it's running next to a directory that contains directories containing data for each hood
+# Each hood data directory contains a set of directories of the form h[hood number]_[x_coordinate][y_coordinate]_all_[on/off, indicating whether UV lights were on or off]
+# Each of these directories contains a csv file for each sensor, showing its voltage over a series of time points
+init_df <- import_data_set("bsc/*/*/*.csv")
+
+```
+
+Now we make the heatmap
+
+```{r, message=FALSE}
+# Calculate summary statistics
+df <- init_df %>% group_by(filename) %>% summarise(mean = mean(X1), min=min(X1), max=max(X1))
+
+# Determine metadata from filepath
 df$on <- df$filename %>% str_extract("all_...") %>% str_replace("all_", "") %>% str_replace("/","")
 df$y <- df$filename %>% str_extract("_[:digit:][:digit:]") %>% str_sub(3,3)
 df$x <- df$filename %>% str_extract("_[:digit:][:digit:]") %>% str_sub(2,2)
 df$hood <- df$filename %>% str_extract("/h[:digit:]") %>% str_extract("[:digit:]")
 df$sensor <- df$filename %>% str_extract("uv_data[:digit:]") %>% str_extract("[:digit:]")
+
+# Do some gymnastics to put on and off data in the same row so that we can easily subtract out the off data (since we assume that's the baseline voltage that is not due to the UV lights)
+df$filename <- NULL
+on_df <- df %>% filter(on=="on")
+off_df <- df %>% filter(on=="off")
+off_df <- off_df %>% mutate(off_mean=mean, off_min=min, off_max = max)
+off_df$mean <- NULL
+off_df$min <- NULL
+off_df$max <- NULL
+off_df$on <- NULL
+on_df$on <- NULL
+df <- merge(on_df, off_df,all.y = TRUE)
+
+# Now do some gymnastics so that we can nest the different positions within the heatmap
+df$y <- as.numeric(as.character(df$y))
+df$sensor <- as.numeric(as.character(df$sensor))
+df$heatmapy <- (df$y-1)*3 + df$sensor-1
+
 df$sensor <- df$sensor %>% recode("1"="bottom", "2"="middle", "3"="top")
+df$hood <- df$hood %>% recode("1"="Hood 1", "2"="Hood 2")
 
-ggplot(data=df %>% filter(on=="on")) + geom_raster(aes(x=x,y=y,fill=mean)) + facet_wrap(~sensor) + theme_classic() + scale_fill_continuous(type = "viridis")
+# Make plot
+ggplot(data=df) + geom_raster(aes(x=x,y=heatmapy,fill=mean-off_mean)) + theme_classic() + scale_fill_continuous("Mean voltage", type = "viridis")  + geom_vline(xintercept = 1.5) + geom_vline(xintercept = 2.5) + geom_hline(yintercept = 5.48) + geom_hline(yintercept = 2.48)  + facet_wrap(~hood) + theme(axis.title = element_blank(), axis.text = element_blank(), axis.ticks = element_blank(), axis.line = element_blank())
 
+```
+
+And now some calculations for the paper
+
+```{r message=FALSE}
+
+math_df <- init_df
+
+# Determine metadata from filepath
+math_df$on <- math_df$filename %>% str_extract("all_...") %>% str_replace("all_", "") %>% str_replace("/","")
+math_df$y <- math_df$filename %>% str_extract("_[:digit:][:digit:]") %>% str_sub(3,3)
+math_df$x <- math_df$filename %>% str_extract("_[:digit:][:digit:]") %>% str_sub(2,2)
+math_df$hood <- math_df$filename %>% str_extract("/h[:digit:]") %>% str_extract("[:digit:]")
+math_df$sensor <- math_df$filename %>% str_extract("uv_data[:digit:]") %>% str_extract("[:digit:]")
+
+# Do the math to figure out the lowest ratio of max positional radition to lowest.
+math_df %>% filter(X1 > max(X1)/2) %>% group_by(hood,x,y) %>% summarise(median=median(X1)) %>% group_by(hood) %>% summarise(max(median)/min(median))
 
 ```
