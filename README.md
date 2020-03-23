@@ -1,5 +1,8 @@
 # Sterilizing personal protective equipment using UV-C radiation in idle biosafety cabinets: A potential method to ease the burden during times of exceptional stress on the healthcare system
 
+![GitHub All Releases](https://img.shields.io/github/downloads/TheoryDivision/covid19_biosafety_cabinet/total) [![DOI](https://zenodo.org/badge/249324287.svg)](https://zenodo.org/badge/latestdoi/249324287)
+
+
 ![Schematic of our methods](methods.png)
 
 ## Contents of this repository
