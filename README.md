@@ -1,4 +1,4 @@
-# Use of UV-C radiation in idle biosafety cabinets to sterilize personal protective equipment: a recommendation to ease the burden during times of exceptional stress on the healthcare system
+# Sterilizing personal protective equipment using UV-C radiation in idle biosafety cabinets: A potential method to ease the burden during times of exceptional stress on the healthcare system
 
 ![Schematic of our methods](methods.png)
 
