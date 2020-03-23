@@ -35,7 +35,7 @@ import_data_set <- function(filenameglob) {
 # This script assumes it's running next to a directory that contains directories containing data for each hood
 # Each hood data directory contains a set of directories of the form h[hood number]_[x_coordinate][y_coordinate]_all_[on/off, indicating whether UV lights were on or off]
 # Each of these directories contains a csv file for each sensor, showing its voltage over a series of time points
-init_df <- import_data_set("bsc/*/*/*.csv")
+init_df <- import_data_set("data/*/*/*.csv")
 
 ```
 

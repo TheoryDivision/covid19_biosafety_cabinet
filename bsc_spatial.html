@@ -396,7 +396,7 @@ import_data_set &lt;- function(filenameglob) {
 # This script assumes it's running next to a directory that contains directories containing data for each hood
 # Each hood data directory contains a set of directories of the form h[hood number]_[x_coordinate][y_coordinate]_all_[on/off, indicating whether UV lights were on or off]
 # Each of these directories contains a csv file for each sensor, showing its voltage over a series of time points
-init_df &lt;- import_data_set(&quot;bsc/*/*/*.csv&quot;)</code></pre>
+init_df &lt;- import_data_set(&quot;data/*/*/*.csv&quot;)</code></pre>
 <p>Now we make the heatmap</p>
 <pre class="r"><code># Calculate summary statistics
 df &lt;- init_df %&gt;% group_by(filename) %&gt;% summarise(mean = mean(X1), min=min(X1), max=max(X1))
