@@ -22,7 +22,7 @@ import_data_set <- function(filenameglob) {
     
     # The data when the lights were on start with 0s that we have to remove
     if (str_detect(file, "all_on")) {
-      df <- rbind(df, slice(temp,100:n()) )  
+      df <- rbind(df, slice(temp,102:n()) )  
     } else {
       df <- rbind(df, temp )
     }
@@ -93,7 +93,12 @@ math_df$sensor <- math_df$filename %>% str_extract("uv_data[:digit:]") %>% str_e
 math_df <- math_df %>% filter(on=="on")
 
 # Do the math to figure out the lowest ratio of max positional radition to lowest.
+# Filter is to eliminate obviously erroneous values. The diodes we used were a little flakey.
+# Calculation based on median at each position (on the assumption that some diodes are probably flakey)
 math_df %>% filter(X1 > max(X1)/2) %>% group_by(hood,x,y) %>% summarise(median=median(X1)) %>% group_by(hood) %>% summarise(max(median)/min(median))
+
+# Calculation based on max and min of all diodes per hood. More conservative.
+math_df %>% filter(X1 > max(X1)/2) %>% group_by(hood) %>% summarise(min=min(X1), max=max(X1), ratio=max(X1)/min(X1))
 
 # Calculate summary statistics across entire dataset
 mean((math_df %>% filter(X1 > max(X1)/2))$X1)

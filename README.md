@@ -13,6 +13,7 @@ By the [Theory Division](https://www.lerner.ccf.org/thor/scott/lab/)
 - **bsc_spatial.Rmd**: An Rmarkdown file containing all of the code to produce the heat maps and summary statistic calculations.
 - **bsc_spatial.html**: An html-rendered version of the corresponding Rmarkdown file
 - **bsc_data.ipynb**: Some preliminary python analysis code
-- **fig.ipynb**: Calculations on survival of different pathogens over varying UV intensity and temporal analysis of our data
+- **fig3.ipynb**: Calculations on survival of different pathogens over varying UV intensity and temporal analysis of our data
 - **uv_record.py**: Code used to record the data.
+- **n_95_variance.py**: Code that calculates variance of diode voltage over time.
 - **PPE_UV_Manuscript.pdf**: Preliminary manuscript on this work
