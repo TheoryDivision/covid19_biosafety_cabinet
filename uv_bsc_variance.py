@@ -20,7 +20,7 @@ for pos in range(n_positions):
     name1 = directory + "\\" + files[pos] + "\\uv_data1.csv" 
     trace1 = pd.read_csv(name1).values
     if len(trace1) > 101:
-        trace1 = trace1[100:]
+        trace1 = trace1[100:] # some of the data was apended to baseline data at T=100
     std1 = np.std(trace1)
     
     name2 = directory + "\\" + files[pos] + "\\uv_data2.csv" 
@@ -35,8 +35,8 @@ for pos in range(n_positions):
         trace3 = trace3[100:]
     std3 = np.std(trace3)
     
-    if math.isnan(any([std1,std2,std3])):
-        print(str(pos))
+#    if math.isnan(any([std1,std2,std3])):
+#        print(str(pos))
     
     col = int(np.mod(pos,3))
     row = int(np.floor(pos/3))
