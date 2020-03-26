@@ -15,9 +15,10 @@ i2c = busio.I2C(board.SCL, board.SDA)
 # Create the ADC object using the I2C bus
 ads = ADS.ADS1015(i2c)
 
-pd = AnalogIn(ads, ADS.P0)
-pd1 = AnalogIn(ads, ADS.P1)
-pd2 = AnalogIn(ads, ADS.P2)
+pd = []
+pd.append(AnalogIn(ads, ADS.P0))
+pd.append(AnalogIn(ads, ADS.P1))
+pd.append(AnalogIn(ads, ADS.P2))
 
 print("{:>5}\t{:>5}".format('raw', 'v'))
 
@@ -34,7 +35,7 @@ pos = int(poss)
 os.mkdir("h{:d}_{:d}_cent_all_off".format(hoodnu,pos))
 os.mkdir("h{:d}_{:d}_cent_all_on".format(hoodnu,pos))
 
-while i<=100:
+for i in range(100):
     print("PD0")
     print("{:>5}\t{:>5.3f}".format(pd.value, pd.voltage))
     volarr.append(pd.voltage)
@@ -47,7 +48,6 @@ while i<=100:
     print("{:>5}\t{:>5.3f}".format(pd2.value, pd2.voltage))
     volarr2.append(pd2.voltage)
     time.sleep(0.01)
-    i+=1
 
 with open("h{:d}_{:d}_cent_all_off/uv_data1.csv".format(hoodnu,pos),'w') as file:
     wr=csv.writer(file)
@@ -62,26 +62,11 @@ with open("h{:d}_{:d}_cent_all_off/uv_data3.csv".format(hoodnu,pos),'w') as file
     wr.writerows(map(lambda x: [x], volarr2))
     file.close()
 
-print("TURN HOOD ON!")
-print("TURN HOOD ON!")
-print("TURN HOOD ON!")
-print("TURN HOOD ON!")
-print("TURN HOOD ON!")
-print("TURN HOOD ON!")
-print("TURN HOOD ON!")
-print("TURN HOOD ON!")
-print("TURN HOOD ON!")
-print("TURN HOOD ON!")
-print("TURN HOOD ON!")
-print("TURN HOOD ON!")
-print("TURN HOOD ON!")
-print("TURN HOOD ON!")
-print("TURN HOOD ON!")
+for i in range(100):
+    print("TURN HOOD ON!")
 time.sleep(5)
 
-i=0
-
-while i<=100:
+for i in range(100):
     print("PD0")
     print("{:>5}\t{:>5.3f}".format(pd.value, pd.voltage))
     volarr.append(pd.voltage)
