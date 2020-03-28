@@ -5,7 +5,7 @@ By the [Theory Division](https://www.lerner.ccf.org/thor/scott/lab/)
 ![GitHub All Releases](https://img.shields.io/github/downloads/TheoryDivision/covid19_biosafety_cabinet/total) [![DOI](https://zenodo.org/badge/249324287.svg)](https://zenodo.org/badge/latestdoi/249324287) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 
-![Schematic of our methods](methods.png)
+![Schematic of our methods](figs/methods.png)
 
 ## Contents of this repository
 
