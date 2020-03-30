@@ -76,7 +76,7 @@ df$hood <- df$hood %>% recode("1"="BSC 1", "2"="BSC 2")
 
 # Make plot
 ggplot(data=df) + geom_raster(aes(x=x,y=heatmapy,fill=mean-off_mean)) + theme_classic() + scale_fill_continuous("Mean voltage", type = "viridis")  + geom_vline(xintercept = 1.5) + geom_vline(xintercept = 2.5) + geom_hline(yintercept = 5.48) + geom_hline(yintercept = 2.48)  + facet_wrap(~hood) + theme(axis.title = element_blank(), axis.text = element_blank(), axis.ticks = element_blank(), axis.line = element_blank())
-
+ggsave("figs/hood_voltage_heat_map.png", width=7, height=3)
 ```
 
 And now some calculations for the paper
@@ -122,9 +122,16 @@ hood_2 <- read_csv("data/hood2/uv_meter.csv",col_names = FALSE)
 uv_meter_data <- data.frame(radiation=c(hood_1$X1, hood_1$X2, hood_1$X3, hood_2$X1, hood_2$X2, hood_2$X3))
 uv_meter_data$x <- c(1,1,1,2,2,2,3,3,3,1,1,1,2,2,2,3,3,3)
 uv_meter_data$y <- rep(c(1,2,3),6)
-uv_meter_data$hood <- c(rep("BSC 1", 9), rep("BSC 2", 9))
+# The second hood with UV meter measurements is not one we have photodiode measurments for 
+uv_meter_data$hood <- c(rep("BSC 1", 9), rep("BSC 3", 9))
 
 # Make plot
 ggplot(data=uv_meter_data) + geom_raster(aes(x=x,y=y,fill=radiation)) + theme_classic() + scale_fill_continuous(expression(atop("UV radiation",~(paste(mu,W)/cm^2))), type = "viridis")  + facet_wrap(~hood) + theme(axis.title = element_blank(), axis.text = element_blank(), axis.ticks = element_blank(), axis.line = element_blank())
+ggsave("figs/uv_meter_heatmap.png", width=7, height=3)
+```
 
+Now let's calculate some numbers based on this data
+
+```{r, message=FALSE}
+uv_meter_data %>% group_by(hood) %>% summarize(ratio=max(radiation)/min(radiation), min=min(radiation))
 ```
