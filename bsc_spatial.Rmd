@@ -126,7 +126,7 @@ uv_meter_data$y <- rep(c(1,2,3),6)
 uv_meter_data$hood <- c(rep("BSC 1", 9), rep("BSC 3", 9))
 
 # Make plot
-ggplot(data=uv_meter_data) + geom_raster(aes(x=x,y=y,fill=radiation)) + theme_classic() + scale_fill_continuous(expression(atop("UV radiation",~(paste(mu,W)/cm^2))), type = "viridis")  + facet_wrap(~hood) + theme(axis.title = element_blank(), axis.text = element_blank(), axis.ticks = element_blank(), axis.line = element_blank())
+ggplot(data=uv_meter_data) + geom_raster(aes(x=x,y=y,fill=radiation)) + theme_classic() + scale_fill_continuous(expression(atop("UV radiation",~(paste(mu,W)/cm^2))), type = "viridis")  + facet_wrap(~hood) + theme(axis.title = element_blank(), axis.text = element_blank(), axis.ticks = element_blank(), axis.line = element_blank()) + geom_text(aes(x=x,y=y,label=radiation), color="black")
 ggsave("figs/uv_meter_heatmap.png", width=7, height=3)
 ```
 
