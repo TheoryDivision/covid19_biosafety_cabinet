@@ -116,7 +116,7 @@ Load the UV meter data and plot it as a heat map.
 ```{r, message=FALSE}
 # Load data
 hood_1 <- read_csv("data/hood1/uv_meter.csv",col_names = FALSE)
-hood_2 <- read_csv("data/hood2/uv_meter.csv",col_names = FALSE)
+hood_2 <- read_csv("data/hood3/uv_meter.csv",col_names = FALSE)
 
 # Convert data from matrix format to dataframe format
 uv_meter_data <- data.frame(radiation=c(hood_1$X1, hood_1$X2, hood_1$X3, hood_2$X1, hood_2$X2, hood_2$X3))
@@ -134,4 +134,26 @@ Now let's calculate some numbers based on this data
 
 ```{r, message=FALSE}
 uv_meter_data %>% group_by(hood) %>% summarize(ratio=max(radiation)/min(radiation), min=min(radiation))
+```
+
+## Raising the UV meter
+
+We can achieve more UV radiation and thus faster decontamination by elevating N95 masks within BSCs. To understand this possibility, we took some measurements at higher elevations within BSC 1:
+
+```{r, message=FALSE}
+# Load data
+hood_1 <- read_csv("data/hood1/uv_meter.csv",col_names = FALSE)
+hood_1_raised_19 <- read_csv("data/hood1/uv_meter_19_inches.csv",col_names = FALSE)
+hood_1_raised_13 <- read_csv("data/hood1/uv_meter_13_inches.csv",col_names = FALSE)
+  
+uv_meter_data <- data.frame(radiation=c(hood_1$X1, hood_1$X2, hood_1$X3, hood_1_raised_13$X1, hood_1_raised_13$X2, hood_1_raised_13$X3, hood_1_raised_19$X1, hood_1_raised_19$X2, hood_1_raised_19$X3))
+uv_meter_data$x <- c(1,1,1,2,2,2,3,3,3,1,1,1,2,2,2,3,3,3,1,1,1,2,2,2,3,3,3)
+uv_meter_data$y <- rep(c(1,2,3),9)
+# The second hood with UV meter measurements is not one we have photodiode measurments for 
+uv_meter_data$hood <- c(rep("Floor", 9), rep("Raised 13 inches", 9), rep("Raised 19 inches", 9))
+  
+# Make plot
+ggplot(data=uv_meter_data) + geom_raster(aes(x=x,y=y,fill=radiation)) + theme_classic() + scale_fill_continuous(expression(atop("UV radiation",~(paste(mu,W)/cm^2))), type = "viridis")  + facet_wrap(~hood) + theme(axis.title = element_blank(), axis.text = element_blank(), axis.ticks = element_blank(), axis.line = element_blank()) + geom_text(aes(x=x,y=y,label=radiation), color="black")
+
+ggsave("figs/uv_meter_heatmap_raised.png", width=7, height=2.5)
 ```
