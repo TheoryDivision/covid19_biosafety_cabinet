@@ -123,7 +123,7 @@ uv_meter_data <- data.frame(radiation=c(hood_1$X1, hood_1$X2, hood_1$X3, hood_2$
 uv_meter_data$x <- c(1,1,1,2,2,2,3,3,3,1,1,1,2,2,2,3,3,3)
 uv_meter_data$y <- rep(c(1,2,3),6)
 # The second hood with UV meter measurements is not one we have photodiode measurments for 
-uv_meter_data$hood <- c(rep("BSC 1", 9), rep("BSC 3", 9))
+uv_meter_data$hood <- c(rep("BSC 1", 9), rep("BSC 2", 9))
 
 # Make plot
 ggplot(data=uv_meter_data) + geom_raster(aes(x=x,y=y,fill=radiation)) + theme_classic() + scale_fill_continuous(expression(atop("UV radiation",~(paste(mu,W)/cm^2))), type = "viridis")  + facet_wrap(~hood) + theme(axis.title = element_blank(), axis.text = element_blank(), axis.ticks = element_blank(), axis.line = element_blank()) + geom_text(aes(x=x,y=y,label=radiation), color="black")
@@ -150,7 +150,7 @@ uv_meter_data <- data.frame(radiation=c(hood_1$X1, hood_1$X2, hood_1$X3, hood_1_
 uv_meter_data$x <- c(1,1,1,2,2,2,3,3,3,1,1,1,2,2,2,3,3,3,1,1,1,2,2,2,3,3,3)
 uv_meter_data$y <- rep(c(1,2,3),9)
 # The second hood with UV meter measurements is not one we have photodiode measurments for 
-uv_meter_data$hood <- c(rep("Floor", 9), rep("Raised 13 inches", 9), rep("Raised 19 inches", 9))
+uv_meter_data$hood <- c(rep("Floor", 9), rep("Raised 33 cm", 9), rep("Raised 48 cm", 9))
   
 # Make plot
 ggplot(data=uv_meter_data) + geom_raster(aes(x=x,y=y,fill=radiation)) + theme_classic() + scale_fill_continuous(expression(atop("UV radiation",~(paste(mu,W)/cm^2))), type = "viridis")  + facet_wrap(~hood) + theme(axis.title = element_blank(), axis.text = element_blank(), axis.ticks = element_blank(), axis.line = element_blank()) + geom_text(aes(x=x,y=y,label=radiation), color="black")
