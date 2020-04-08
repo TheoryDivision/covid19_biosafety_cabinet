@@ -38,7 +38,25 @@ import_data_set <- function(filenameglob) {
 # Each hood data directory contains a set of directories of the form h[hood number]_[x_coordinate][y_coordinate]_all_[on/off, indicating whether UV lights were on or off]
 # Each of these directories contains a csv file for each sensor, showing its voltage over a series of time points
 init_df <- import_data_set("data/*/*/*.csv")
+```
 
+Calculate the variation across each mask from photodiode data
+```{r, message=FALSE}
+#initiate 
+geo_vars <- dplyr::distinct(df %>% select(1:3))
+vars <-vector("list",length(geo_vars$x))
+i= 1
+for(xs in  unique(df$x)){
+  for(ys in  unique(df$y)){
+    for(hd in unique(df$hood)){
+      vars[[i]] <- max(df[df$x==xs & df$y==ys & df$hood==hd ,'mean']) / min(df[df$x==xs & df$y==ys & df$hood==hd ,'mean'])
+      
+      i=i +1
+    }
+  }
+}
+geo_vars$var <- unlist(vars)
+geo_vars[geo_vars$var == max(geo_vars$var),]
 ```
 
 Now we make the heatmap
