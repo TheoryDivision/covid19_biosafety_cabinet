@@ -44,19 +44,18 @@ Calculate the variation across each mask from photodiode data
 ```{r, message=FALSE}
 #initiate 
 geo_vars <- dplyr::distinct(df %>% select(1:3))
-vars <-vector("list",length(geo_vars$x))
-i= 1
+geo_vars$var <-NA
+
 for(xs in  unique(df$x)){
   for(ys in  unique(df$y)){
     for(hd in unique(df$hood)){
-      vars[[i]] <- max(df[df$x==xs & df$y==ys & df$hood==hd ,'mean']) / min(df[df$x==xs & df$y==ys & df$hood==hd ,'mean'])
-      
-      i=i +1
+      geo_vars[geo_vars$x==xs & geo_vars$y==ys & geo_vars$hood==hd,"var"]<- (max(df[df$x==xs & df$y==ys & df$hood==hd ,'mean']) / min(df[df$x==xs & df$y==ys & df$hood==hd ,'mean']))
+
     }
   }
 }
-geo_vars$var <- unlist(vars)
-geo_vars[geo_vars$var == max(geo_vars$var),]
+geo_vars[geo_vars$var==max(geo_vars$var),]
+
 ```
 
 Now we make the heatmap
