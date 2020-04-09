@@ -21,14 +21,9 @@ import_data_set <- function(filenameglob) {
   for (file in fileNames) {
     temp <- read_csv(file, col_names = FALSE)
     temp$filename <- file
-    
-    # The data when the lights were on start with 0s that we have to remove
-    if (str_detect(file, "all_on")) {
-      df <- rbind(df, slice(temp,102:n()) )  
-    } else {
-      df <- rbind(df, temp )
-    }
-    
+    temp$time <- row.names(temp)
+    df <- rbind(df, temp)  
+
   }
   return(df)
 }
@@ -37,25 +32,13 @@ import_data_set <- function(filenameglob) {
 # This script assumes it's running next to a directory that contains directories containing data for each hood
 # Each hood data directory contains a set of directories of the form h[hood number]_[x_coordinate][y_coordinate]_all_[on/off, indicating whether UV lights were on or off]
 # Each of these directories contains a csv file for each sensor, showing its voltage over a series of time points
-init_df <- import_data_set("data/*/*/*.csv")
-```
+init_df <- import_data_set("data/*/*/*.csv") 
+init_df$time <- as.numeric(as.character(init_df$time))
 
-Calculate the variation across each mask from photodiode data
-```{r, message=FALSE}
-#initiate 
-geo_vars <- dplyr::distinct(df %>% select(1:3))
-geo_vars$var <-NA
-
-for(xs in  unique(df$x)){
-  for(ys in  unique(df$y)){
-    for(hd in unique(df$hood)){
-      geo_vars[geo_vars$x==xs & geo_vars$y==ys & geo_vars$hood==hd,"var"]<- (max(df[df$x==xs & df$y==ys & df$hood==hd ,'mean']) / min(df[df$x==xs & df$y==ys & df$hood==hd ,'mean']))
-
-    }
-  }
-}
-geo_vars[geo_vars$var==max(geo_vars$var),]
-
+# The "lights on" files have an extra 100 0-ish data points at the beginning, except the center position in hood 1
+init_df <- init_df %>% filter(str_detect(filename, "h1_22") | str_detect(filename, "all_off") | time > 101)
+# Make sure everything looks right
+ggplot(data=init_df) + geom_point(aes(y=X1, color=str_detect(filename, "all_off"), x=time)) + theme(legend.position = "none")
 ```
 
 Now we make the heatmap
@@ -96,34 +79,18 @@ ggplot(data=df) + geom_raster(aes(x=x,y=heatmapy,fill=mean-off_mean)) + theme_cl
 ggsave("figs/hood_voltage_heat_map.png", width=7, height=3)
 ```
 
-And now some calculations for the paper
+Calculate the variation across each mask from photodiode data
+
 
 ```{r message=FALSE}
 
-math_df <- init_df 
-
-# Determine metadata from filepath
-math_df$on <- math_df$filename %>% str_extract("all_...") %>% str_replace("all_", "") %>% str_replace("/","")
-math_df$y <- math_df$filename %>% str_extract("_[:digit:][:digit:]") %>% str_sub(3,3)
-math_df$x <- math_df$filename %>% str_extract("_[:digit:][:digit:]") %>% str_sub(2,2)
-math_df$hood <- math_df$filename %>% str_extract("/h[:digit:]") %>% str_extract("[:digit:]")
-math_df$sensor <- math_df$filename %>% str_extract("uv_data[:digit:]") %>% str_extract("[:digit:]")
-
-math_df <- math_df %>% filter(on=="on")
-
-# Do the math to figure out the lowest ratio of max positional radition to lowest.
-# Filter is to eliminate obviously erroneous values. The diodes we used were a little flakey.
-# Calculation based on median at each position (on the assumption that some diodes are probably flakey)
-math_df %>% filter(X1 > max(X1)/2) %>% group_by(hood,x,y) %>% summarise(median=median(X1)) %>% group_by(hood) %>% summarise(max(median)/min(median))
-
-# Calculation based on max and min of all diodes per hood. More conservative.
-math_df %>% filter(X1 > max(X1)/2) %>% group_by(hood) %>% summarise(min=min(X1), max=max(X1), ratio=max(X1)/min(X1))
+df %>% group_by(hood, x, y) %>% summarise(min=min(mean-off_mean), max=max(mean-off_mean), ratio=max(mean-off_mean)/min(mean-off_mean))
 
 # Calculate summary statistics across entire dataset
-mean((math_df %>% filter(X1 > max(X1)/2))$X1)
-min((math_df %>% filter(X1 > max(X1)/2))$X1)
-max((math_df %>% filter(X1 > max(X1)/2))$X1)
-sd((math_df %>% filter(X1 > max(X1)/2))$X1)
+mean(df$mean - df$off_mean)
+min(df$mean - df$off_mean)
+max(df$mean - df$off_mean)
+sd(df$mean - df$off_mean)
 ```
 
 # UV meter analysis
