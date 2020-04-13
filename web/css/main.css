@@ -1,0 +1,165 @@
+/* Black tooltips would blend into the jumbotron */
+/* .tooltip-arrow,
+.tooltip > .tooltip-inner {background-color: #007bff;} */
+
+
+/* So the header doesn't spill over on mobile */
+h1 {
+    word-wrap:break-word;
+}
+
+#banner {
+    color:#FFF;
+    padding-bottom:10px;
+    background: #000000;
+}
+
+#banner .btn-light {
+    height:45px;width:50px;   
+}
+
+button span {
+    vertical-align: middle;   
+}
+
+/* For scroll to top button */
+.back-to-top {
+    cursor: pointer;
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    display:none;
+}
+
+.center {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.bar {
+  fill: orange;
+}
+
+.bar:hover {
+  fill: orangered ;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.d3-tip {
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+
+.card-header {
+    font-weight: bold;
+    font-size: x-large;
+}
+
+label {
+    margin-bottom: 0;
+}
+
+
+input {
+    /* flex-grow: 1.5; */
+}
+
+form {
+    justify-content: space-around;
+}
+
+form > output {
+    flex-grow: .1;
+    width: 100px;
+    color: white;
+    line-height: 10px;
+    text-align: center;
+    border-radius: 3px;
+    background: black;
+    padding: 5px 5px;
+}
+
+/* output::after {
+    position: absolute;
+    top: 0px;
+    left: -10px;
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-right: 10px solid black;
+    border-bottom: 10px solid transparent;
+    content: '';
+} */
+label {
+    /* display: inline-block; */
+    flex-grow: .1;
+    width: 200px;
+    text-align: right;
+    padding-right: 5px;
+}​
+.row.display-flex {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .row.display-flex > [class*='col-'] {
+    display: flex;
+    flex-direction: column;
+  }
+
+svg {
+    border-bottom: 3px solid red;
+    border-right: 3px solid red;
+    border-left: 3px solid red;
+    border-top: 3px solid red;
+}
+
+/* .container {
+    height: 99vh;
+    border: 3px;
+    box-sizing: border-box;
+    border-radius: 10px;
+}
+
+body {
+    height: 99vh;
+    margin: 0;
+    padding: 10px;
+    box-sizing: border-box;
+} */
+
+/*  html, body {height: 100%} */
