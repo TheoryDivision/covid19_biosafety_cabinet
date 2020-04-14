@@ -30,10 +30,57 @@
     <div class="container" width=90%>
         <div class="row h-100">
             <div class="col" height=100% id="chartArea">
-                <h1 style="text-align: center;">Hello, world!</h1>
                 <div class="h-100" id="frame">
                     <svg width="500px" height="500px" id="room"></svg>
                 </div> 
+            </div>
+            <div class="col" height=100% id="controlPanel">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Target dose: </span>
+                    </div>
+                    <input id="target_input" onchange="updateTarget()" type="text" class="form-control" placeholder="1" aria-label="Target dose of UV-C radiation">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Joules/cm^2</button>
+                        <div class="dropdown-menu">
+                          <a class="dropdown-item" href="#">Joules/cm^2</a>
+                          <a class="dropdown-item disabled" href="#">Millijoules/cm^2</a>
+                          <!-- <a class="dropdown-item" href="#">Something else here</a> -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Room width: </span>
+                    </div>
+                    <input id="width_input" onchange="updateWidth()" type="text" class="form-control" placeholder="300" aria-label="Width of room">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">cm</button>
+                        <div class="dropdown-menu">
+                          <a class="dropdown-item" href="#">cm</a>
+                          <a class="dropdown-item disabled" href="#">inches</a>
+                          <!-- <a class="dropdown-item" href="#">Something else here</a> -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Room depth: </span>
+                    </div>
+                    <input id="depth_input" onchange="updateDepth()" type="text" class="form-control" placeholder="300" aria-label="Depth of room">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">cm</button>
+                        <div class="dropdown-menu">
+                          <a class="dropdown-item" href="#">cm</a>
+                          <a class="dropdown-item disabled" href="#">inches</a>
+                          <!-- <a class="dropdown-item" href="#">Something else here</a> -->
+                        </div>
+                    </div>
+                </div>
+
+
             </div>
           </div>
     </div>
@@ -44,6 +91,8 @@
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="d3-tip.js"></script>
+    <script src="functions.js"></script>
     <script src="main.js"></script>
 </body>
 </html>
