@@ -68,6 +68,8 @@ function updateHeatmap() {
     svg.selectAll("rect")
         .style("fill", function(d){d.time = calculateTimeToTarget(calculateIntensity(d)); return color_scale(d.time);})
         .style("stroke", function(d){return color_scale(d.time);});
+
+    updateColorBar();
 }
 
 function updateCircles() {
@@ -145,4 +147,72 @@ function remove_heatmap() {
         .data([])
         .exit()
         .remove();
+}
+
+function linspace(start, end, n) {
+    var out = [];
+    var delta = (end - start) / (n - 1);
+
+    var i = 0;
+    while(i < (n - 1)) {
+        out.push(start + (i * delta));
+        i++;
+    }
+
+    out.push(end);
+    return out;
+}
+
+function updateColorBar() {
+    legendSvg.selectAll(".bars").remove();
+    legendSvg.selectAll("g").remove();
+
+    var bars = legendSvg.selectAll(".bars")
+    .data(d3.range(0,720, 2), function(d) { return d; })
+        .enter().append("rect")
+            .attr("class", "bars")
+            .attr("y", function(d, i) { return i + 10; })
+            .attr("x", 0)
+            .attr("height", 1)
+            .attr("width", 40)
+            .style("fill", function(d, i ) { return color_scale(d); })
+            .style("stroke", function(d, i ) { return color_scale(d); })
+
+    var color_axis_scale = d3.scaleLinear().domain(color_scale.domain()).range([0, 720/2]);
+    var color_axis = d3.axisRight(color_axis_scale);
+    legendSvg.append("g")
+            .attr("transform", "translate(45,10)")
+             .call(color_axis);
+}
+
+function addLamp(newData) {
+    dataset.push(newData);   // Push data to our array
+    // console.log(dataset);
+    svg.selectAll("circle")  // For new circle, go through the update process
+        .data(dataset)
+        .enter()
+        .append("circle")
+        .attr("cx", function(d) { return x_scale(d.x); })
+        .attr("cy", function(d) { return y_scale(d.y); })
+        .attr("r", radius)
+        .style("fill", "violet")
+        .call(drag)
+        .on("click", removeElement)
+        .on('mouseover', circle_tool_tip.show)
+        .on('mouseout', circle_tool_tip.hide);
+
+    updateHeatmap();
+
+}
+
+function addLampFromForm(){
+
+    var newData= {
+        x: document.getElementById("lamp_x_input").value,  // Takes the pixel number to convert to number
+        y: document.getElementById("lamp_y_input").value,
+        intensity: document.getElementById("intensity_input").value,  //uW/cm^2
+        distance: document.getElementById("intensity_distance_input").value // cm
+    };
+    // console.log("coords", coords, "newdata", newData);
+    addLamp(newData);
 }

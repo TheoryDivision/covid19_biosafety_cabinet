@@ -29,12 +29,16 @@
 
     <div class="container" width=90%>
         <div class="row h-100">
-            <div class="col" height=100% id="chartArea">
-                <div class="h-100" id="frame">
+            <div class="col-md-auto" height=100% id="chartArea">
+                <div class="h-100" width="1000px" id="frame">
                     <svg width="500px" height="500px" id="room"></svg>
+                    <svg id="legend-svg" width = "100px" height="380px"></svg>
                 </div> 
             </div>
             <div class="col" height=100% id="controlPanel">
+
+                <h1 style="text-align:center">Global Settings</h1>
+
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                       <span class="input-group-text">Target dose: </span>
@@ -79,6 +83,70 @@
                         </div>
                     </div>
                 </div>
+
+                <h1 style="text-align:center">Create New Lamp</h1>
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Intensity: </span>
+                    </div>
+                    <input id="intensity_input" type="text" class="form-control" aria-label="Bulb intensity">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Microwatts/cm^2</button>
+                        <div class="dropdown-menu">
+                          <a class="dropdown-item" href="#">Microwatts/cm^2</a>
+                          <a class="dropdown-item disabled" href="#">Other units?</a>
+                          <!-- <a class="dropdown-item" href="#">Something else here</a> -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Distance of specified intensity: </span>
+                    </div>
+                    <input id="intensity_distance_input" type="text" class="form-control" aria-label="Bulb intensity">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">cm</button>
+                        <div class="dropdown-menu">
+                          <a class="dropdown-item" href="#">cm</a>
+                          <a class="dropdown-item disabled" href="#">in</a>
+                          <!-- <a class="dropdown-item" href="#">Something else here</a> -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">X position in room: </span>
+                    </div>
+                    <input id="lamp_x_input" type="text" class="form-control" aria-label="X position">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">cm</button>
+                        <div class="dropdown-menu">
+                          <a class="dropdown-item" href="#">cm</a>
+                          <a class="dropdown-item disabled" href="#">in</a>
+                          <!-- <a class="dropdown-item" href="#">Something else here</a> -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Y position in room: </span>
+                    </div>
+                    <input id="lamp_y_input" type="text" class="form-control" aria-label="Y position">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">cm</button>
+                        <div class="dropdown-menu">
+                          <a class="dropdown-item" href="#">cm</a>
+                          <a class="dropdown-item disabled" href="#">in</a>
+                          <!-- <a class="dropdown-item" href="#">Something else here</a> -->
+                        </div>
+                    </div>
+                </div>
+
+                <a class="btn btn-primary" onclick="addLampFromForm()" href="#" role="button">Add lamp</a>
 
 
             </div>

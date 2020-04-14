@@ -64,24 +64,9 @@ svg.on("click", function(){
         intensity: 260,  //uW/cm^2
         distance: 100 // cm
     };
-    console.log("coords", coords, "newdata", newData);
-    dataset.push(newData);   // Push data to our array
-    // console.log(dataset);
-    svg.selectAll("circle")  // For new circle, go through the update process
-        .data(dataset)
-        .enter()
-        .append("circle")
-        .attr("cx", function(d) { return x_scale(d.x); })
-        .attr("cy", function(d) { return y_scale(d.y); })
-        .attr("r", radius)
-        .style("fill", "violet")
-        .call(drag)
-        .on("click", removeElement)
-        .on('mouseover', circle_tool_tip.show)
-        .on('mouseout', circle_tool_tip.hide);
-
-    updateHeatmap();
-
+    // console.log("coords", coords, "newdata", newData);
+    addLamp(newData);
 });
 
 
+var legendSvg = d3.select('#legend-svg');

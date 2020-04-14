@@ -141,11 +141,11 @@ label {
     flex-direction: column;
   }
 
-svg {
-    border-bottom: 3px solid red;
-    border-right: 3px solid red;
-    border-left: 3px solid red;
-    border-top: 3px solid red;
+#room {
+    border-bottom: 3px solid black;
+    border-right: 3px solid black;
+    border-left: 3px solid black;
+    border-top: 3px solid black;
 }
 
 /* .container {
