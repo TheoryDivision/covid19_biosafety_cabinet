@@ -86,7 +86,8 @@ function updateCircles() {
         .call(drag)
         .on("click", removeElement)
         .on('mouseover', circle_tool_tip.show)
-        .on('mouseout', circle_tool_tip.hide);
+        .on('mouseout', circle_tool_tip.hide)
+        .on("contextmenu", lampMenu);
 }
 
 function rescaleData() {
@@ -185,6 +186,20 @@ function updateColorBar() {
              .call(color_axis);
 }
 
+function lampMenu(d){
+    d3.event.preventDefault();
+    console.log("context", d);
+    active_data = dataset[dataset.indexOf(d)];
+    console.log(active_data);
+    document.getElementById("modal_lamp_x_input").value = d.x;
+    document.getElementById("modal_lamp_y_input").value = d.y;
+    document.getElementById("modal_intensity_input").value = d.intensity;
+    document.getElementById("modal_intensity_distance_input").value = d.distance;    
+    // $('#lampModalBody').text("Intensity: " + d.intensity + "<br>Distance of specified intensity: " + d.distance ); 
+    $('#myModal').modal({show:true}); 
+    return false;
+}
+
 function addLamp(newData) {
     dataset.push(newData);   // Push data to our array
     // console.log(dataset);
@@ -199,10 +214,21 @@ function addLamp(newData) {
         .call(drag)
         .on("click", removeElement)
         .on('mouseover', circle_tool_tip.show)
-        .on('mouseout', circle_tool_tip.hide);
+        .on('mouseout', circle_tool_tip.hide)
+        .on("contextmenu", lampMenu);
 
     updateHeatmap();
 
+}
+
+function updateLamp() {
+    active_data.x = document.getElementById("modal_lamp_x_input").value;
+    active_data.y = document.getElementById("modal_lamp_y_input").value;
+    active_data.intensity = document.getElementById("modal_intensity_input").value;
+    active_data.distance = document.getElementById("modal_intensity_distance_input").value;
+    
+    updateCircles();
+    updateHeatmap();
 }
 
 function addLampFromForm(){

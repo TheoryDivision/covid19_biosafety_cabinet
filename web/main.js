@@ -25,6 +25,8 @@ var x_scale = d3.scaleLinear().domain([0, room_width]).range([0, screen_width]);
 var y_scale = d3.scaleLinear().domain([0, room_depth]).range([0, screen_height]);
 var color_scale = d3.scaleSequential(d3.interpolateViridis).domain([0,720]);
 
+var active_data;
+
 svg = d3.select("#room");
 
 var rect_tool_tip = d3.tip()
