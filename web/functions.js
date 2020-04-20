@@ -4,12 +4,19 @@ function updateTarget() {
     updateHeatmap();
 }
 
+function updateSVGWidthAndHeight() {
+    aspect_ratio = room_depth/room_width;
+    screen_height = screen_width * aspect_ratio;
+    svg.attr("height", screen_height);
+    x_scale = d3.scaleLinear().domain([0, room_width]).range([0, screen_width]);
+    y_scale = d3.scaleLinear().domain([0, room_depth]).range([0, screen_height]); 
+}
+
 function updateWidth() {
     previous_width = room_width;
     room_width = +document.getElementById("width_input").value;
     // console.log(room_width);
-    x_scale = d3.scaleLinear().domain([0, room_width]).range([0, screen_width]);
-    y_scale = d3.scaleLinear().domain([0, room_depth]).range([0, screen_height]);    
+    updateSVGWidthAndHeight();
     remove_heatmap();
     updateCircles();
     make_heatmap();
@@ -20,9 +27,8 @@ function updateWidth() {
 function updateDepth() {
     previous_depth = room_depth;
     room_depth = +document.getElementById("depth_input").value;
+    updateSVGWidthAndHeight();
     // console.log(room_depth);
-    x_scale = d3.scaleLinear().domain([0, room_width]).range([0, screen_width]);
-    y_scale = d3.scaleLinear().domain([0, room_depth]).range([0, screen_height]);    
     remove_heatmap();
     updateCircles();
     make_heatmap();
@@ -79,7 +85,7 @@ function updateCircles() {
         .data(dataset)
         .enter()
         .append("circle")
-        .attr("cx", function(d) { console.log("update"); return x_scale(d.x); })
+        .attr("cx", function(d) { return x_scale(d.x); })
         .attr("cy", function(d) { return y_scale(d.y); })
         .attr("r", radius)
         .style("fill", "violet")
@@ -108,8 +114,8 @@ function dragstarted(d) {
 function dragged(d) {
     console.log(d);
     var coords = d3.mouse(this);
-    d.x = x_scale.invert(coords[0]);
-    d.y = y_scale.invert(coords[1]);
+    d.x = Math.round(x_scale.invert(coords[0]));
+    d.y = Math.round(y_scale.invert(coords[1]));
     // console.log(d);
     d3.select(this).attr("cx", x_scale(d.x)).attr("cy", y_scale(d.y));
     // console.log(d3.select(this).attr("cx"));

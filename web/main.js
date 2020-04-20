@@ -26,8 +26,11 @@ var y_scale = d3.scaleLinear().domain([0, room_depth]).range([0, screen_height])
 var color_scale = d3.scaleSequential(d3.interpolateViridis).domain([0,720]);
 
 var active_data;
+var aspect_ratio = 1;
 
 svg = d3.select("#room");
+
+updateSVGWidthAndHeight();
 
 var rect_tool_tip = d3.tip()
     .attr("class", "d3-tip")
