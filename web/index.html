@@ -30,9 +30,9 @@
     <div class="container-fluid" width=100%>
         <div class="row h-100">
             <div class="col-6" height=100% id="chartArea">
-                <div class="h-100" width="1000px" id="frame">
-                    <svg width="90%" id="room"></svg>
-                    <svg id="legend-svg" width = "100px" height="380px"></svg>
+                <div class="h-100" width="100%" id="frame">
+                    <svg width="80%" id="room"></svg>
+                    <svg id="legend-svg" width="10%" height="380px"></svg>
                 </div> 
             </div>
             <div class="col" height=100% id="controlPanel">
@@ -43,7 +43,7 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text">Target dose: </span>
                     </div>
-                    <input id="target_input" onchange="updateTarget()" type="text" class="form-control" placeholder="1" aria-label="Target dose of UV-C radiation">
+                    <input id="target_input" onchange="updateTarget()" type="text" class="form-control" value="1" aria-label="Target dose of UV-C radiation">
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Joules/cm^2</button>
                         <div class="dropdown-menu">
@@ -58,7 +58,7 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text">Room width: </span>
                     </div>
-                    <input id="width_input" onchange="updateWidth()" type="text" class="form-control" placeholder="300" aria-label="Width of room">
+                    <input id="width_input" onchange="updateWidth()" type="text" class="form-control" value="300" aria-label="Width of room">
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">cm</button>
                         <div class="dropdown-menu">
@@ -73,7 +73,7 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text">Room depth: </span>
                     </div>
-                    <input id="depth_input" onchange="updateDepth()" type="text" class="form-control" placeholder="300" aria-label="Depth of room">
+                    <input id="depth_input" onchange="updateDepth()" type="text" class="form-control" value="300" aria-label="Depth of room">
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">cm</button>
                         <div class="dropdown-menu">
@@ -83,6 +83,22 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">Maximum allowable time: </span>
+                  </div>
+                  <input id="time_input" onchange="updateMaxTime()" type="text" class="form-control" value="720" aria-label="Depth of room">
+                  <div class="input-group-append">
+                      <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">minutes</button>
+                      <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">minutes</a>
+                        <a class="dropdown-item disabled" href="#">hours</a>
+                        <!-- <a class="dropdown-item" href="#">Something else here</a> -->
+                      </div>
+                  </div>
+              </div>
+
 
                 <h1 style="text-align:center">Create New Lamp</h1>
 
@@ -147,7 +163,7 @@
                 </div>
 
                 <a class="btn btn-primary" onclick="addLampFromForm()" href="#" role="button">Add lamp with these settings</a>
-
+                <a class="btn btn-info" onclick="clearLamps()" href="#" role="button">Remove All Lamps</a>
 
             </div>
           </div>

@@ -9,26 +9,38 @@ $('.dropdown-item').on('click',  function(){
 
 var radius = 20;
 var resolution = 100;
+var max_time = +document.getElementById("time_input").value;
 
 var dataset = [];
 var frame_left = document.getElementById("room").getBoundingClientRect().left;
 var frame_top = document.getElementById("room").getBoundingClientRect().top;
 var screen_width = document.getElementById("room").getBoundingClientRect().width;
 var screen_height = document.getElementById("room").getBoundingClientRect().height;
-var room_width = 300; // cm
-var room_depth = 300; // cm
+var room_width = +document.getElementById("width_input").value; // cm
+var room_depth = +document.getElementById("depth_input").value; // cm
 var previous_width = room_width;
 var previous_depth = room_depth;
-var target_dose = 1; // Joules/cm^2
+var target_dose = +document.getElementById("target_input").value; // Joules/cm^2
 
 var x_scale = d3.scaleLinear().domain([0, room_width]).range([0, screen_width]);
 var y_scale = d3.scaleLinear().domain([0, room_depth]).range([0, screen_height]);
-var color_scale = d3.scaleSequential(d3.interpolateViridis).domain([0,720]);
+
+function clipped_viridis(d) {
+    // console.log(d);
+    if (d < 0) {
+        return "black";
+    } else {
+        return d3.interpolateViridis(d);
+    }
+}
+
+var color_scale = d3.scaleSequential(clipped_viridis).domain([max_time, 0]).unknown("black");
 
 var active_data;
 var aspect_ratio = 1;
 
 svg = d3.select("#room");
+var legendSvg = d3.select('#legend-svg');
 
 updateSVGWidthAndHeight();
 
@@ -74,4 +86,4 @@ svg.on("click", function(){
 });
 
 
-var legendSvg = d3.select('#legend-svg');
+

@@ -12,6 +12,12 @@ function updateSVGWidthAndHeight() {
     y_scale = d3.scaleLinear().domain([0, room_depth]).range([0, screen_height]); 
 }
 
+function updateMaxTime() {
+    max_time = +document.getElementById("time_input").value;
+    color_scale = d3.scaleSequential(clipped_viridis).domain([max_time, 0]).unknown("black");
+    updateHeatmap();
+}
+
 function updateWidth() {
     previous_width = room_width;
     room_width = +document.getElementById("width_input").value;
@@ -112,7 +118,7 @@ function dragstarted(d) {
 }
 
 function dragged(d) {
-    console.log(d);
+    // console.log(d);
     var coords = d3.mouse(this);
     d.x = Math.round(x_scale.invert(coords[0]));
     d.y = Math.round(y_scale.invert(coords[1]));
@@ -143,9 +149,12 @@ function make_heatmap() {
         .attr("y", function(d){return y_scale(d[1]);})
         .attr("width", screen_width/resolution)
         .attr("height", screen_height/resolution)
-        .style("fill", "white")
+        .style("fill", function(d){d.time = calculateTimeToTarget(calculateIntensity(d)); return color_scale(d.time);})
+        .style("stroke", function(d){return color_scale(d.time);})
         .on('mouseover', rect_tool_tip.show)
         .on('mouseout', rect_tool_tip.hide);
+
+        updateColorBar();
 
 }
 
@@ -174,8 +183,10 @@ function updateColorBar() {
     legendSvg.selectAll(".bars").remove();
     legendSvg.selectAll("g").remove();
 
+    legend_height = document.getElementById("legend-svg").getBoundingClientRect().height - 20;
+
     var bars = legendSvg.selectAll(".bars")
-    .data(d3.range(0,720, 2), function(d) { return d; })
+    .data(d3.range(0, max_time, max_time/legend_height), function(d) { return d; })
         .enter().append("rect")
             .attr("class", "bars")
             .attr("y", function(d, i) { return i + 10; })
@@ -185,7 +196,7 @@ function updateColorBar() {
             .style("fill", function(d, i ) { return color_scale(d); })
             .style("stroke", function(d, i ) { return color_scale(d); })
 
-    var color_axis_scale = d3.scaleLinear().domain(color_scale.domain()).range([0, 720/2]);
+    var color_axis_scale = d3.scaleLinear().domain(color_scale.domain()).range([legend_height, 0]);
     var color_axis = d3.axisRight(color_axis_scale);
     legendSvg.append("g")
             .attr("transform", "translate(45,10)")
@@ -194,9 +205,9 @@ function updateColorBar() {
 
 function lampMenu(d){
     d3.event.preventDefault();
-    console.log("context", d);
+    // console.log("context", d);
     active_data = dataset[dataset.indexOf(d)];
-    console.log(active_data);
+    // console.log(active_data);
     document.getElementById("modal_lamp_x_input").value = d.x;
     document.getElementById("modal_lamp_y_input").value = d.y;
     document.getElementById("modal_intensity_input").value = d.intensity;
@@ -228,10 +239,10 @@ function addLamp(newData) {
 }
 
 function updateLamp() {
-    active_data.x = document.getElementById("modal_lamp_x_input").value;
-    active_data.y = document.getElementById("modal_lamp_y_input").value;
-    active_data.intensity = document.getElementById("modal_intensity_input").value;
-    active_data.distance = document.getElementById("modal_intensity_distance_input").value;
+    active_data.x = +document.getElementById("modal_lamp_x_input").value;
+    active_data.y = +document.getElementById("modal_lamp_y_input").value;
+    active_data.intensity = +document.getElementById("modal_intensity_input").value;
+    active_data.distance = +document.getElementById("modal_intensity_distance_input").value;
     
     updateCircles();
     updateHeatmap();
@@ -240,11 +251,17 @@ function updateLamp() {
 function addLampFromForm(){
 
     var newData= {
-        x: document.getElementById("lamp_x_input").value,  // Takes the pixel number to convert to number
-        y: document.getElementById("lamp_y_input").value,
-        intensity: document.getElementById("intensity_input").value,  //uW/cm^2
-        distance: document.getElementById("intensity_distance_input").value // cm
+        x: +document.getElementById("lamp_x_input").value,  // Takes the pixel number to convert to number
+        y: +document.getElementById("lamp_y_input").value,
+        intensity: +document.getElementById("intensity_input").value,  //uW/cm^2
+        distance: +document.getElementById("intensity_distance_input").value // cm
     };
     // console.log("coords", coords, "newdata", newData);
     addLamp(newData);
+}
+
+function clearLamps() {
+    dataset = [];
+    updateCircles();
+    updateHeatmap();
 }
