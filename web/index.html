@@ -18,9 +18,48 @@
         <!-- Page description -->
         <p>
             <br>
-            THIS IS A WORK IN PROGRESS - DO NOT USE YET
+            At appropriate doses, UV-C radiation is an effective technique for decontaminating surfaces from viruses and bacteria.
+            While we do not reccomend re-using single-use personal protective equipment (PPE) in general, the current COVID-19 pandemic has caused 
+            serious shortages. Decontaminating and re-using PPE is most likely substantially safer than either not wearing PPE or re-using
+            PPE without decontamination. To this end, hospitals have begun using UV-C as an approach to decontaminating personal protective equipment.
+            However, every hospital has different UV lights available and differently-sized rooms in which to use them. 
+            This website allows you to model placing UV-C lights in different positions within a room.
+
         </p>
-    
+
+        <p>
+          Cautions:
+
+          <ul>
+            <li>We have not yet validated this calculator via comparison to a real set up. Use at your own risk.</li>
+            <li>We are currently modeling UV lights as point sources. This assumption should hold within a certian slice of vertical space within a room, at certain distances from the lights. (we're working on quantifying these ranges)</li>
+            <li>The accuracy of this calculator depends on the accuracy of the information you put in about your UV lamps.</li>
+            <li>UV light bulbs lose intensity as they age. Ideally, the UV output of each bulb should be measured regularly. If this is not possible, care should be taken to use new bulbs.</li>
+            <li>This calculator should only be used with UV-C lights, as opposed to UV-A or UV-B lights. Only UV-C radiation has been shown to be effective at killing pathogens.</li>
+            <li>UV-C radiation is harmful to humans. People should not be in a UV decontamination room while the UV lights are on.</li>
+            <li>UV-C radiation can eventually break down materials used in PPE. The number of decontamination cycles each piece of PPE has been through should be tracked, and any PPE showing excessive degradation should be discarded. In particular, N95 masks should be regularly fit-tested.</li>
+          </ul>
+        </p>
+
+        <p>
+          How to use:
+
+          <ul>
+            <li>The heatmap shows the number of minutes an item would need to be left at each x,y position in the room in order to recieve the specified target dose of UV-C radiation. Regions colored black would take more than the specified maximum allowable time to recieve the specified dose.</li>
+            <li>To add a UV light, either click on a spot on the heatmap or use the "Create New Lamp" form on the right (fill in the lamp data and click "Add lamp with these settings.").</li>
+            <li>To change the settings of an existing light, right click on the circle representing that lamp on the heat map, enter the desired new settings, and click "Save changes".</li>
+            <li>The x and y coordinates of a light can also be changed by clicking and dragging it.</li>
+            <li>Lights can be removed by clicking on them. All lights can be simultaneously removed by clicking the "Remove all lamps" button.</li>
+          </ul>
+        </p>
+
+        <p>
+          Features coming soon:
+          <ul>
+            <li>More (i.e. any) options for units of measurement.</li>
+          </ul>
+        </p>
+
         <p>
             If you have questions or want to know more, [contact info goes here]
         </p>
