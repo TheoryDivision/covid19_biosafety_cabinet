@@ -1,3 +1,24 @@
+function scale () {
+    return d3.geoTransform({
+        point: function(x, y) {
+            var new_x, new_y;
+            // if (x == 0) {
+            //     new_x = -1;
+            // } else {
+                new_x = (x-1)*(screen_width)/(resolution);
+            // }
+            // if (y == 0) {
+            //     new_y = -1;
+            //     // new_x += 10;
+            // } else {
+                new_y = (y-1)*(screen_height)/(resolution);
+            // }
+
+            this.stream.point( new_x , new_y);
+        }
+    });
+    }
+
 function updateTarget() {
     target_dose = document.getElementById("target_input").value;
     // console.log(target_dose);
@@ -24,6 +45,7 @@ function updateWidth() {
     // console.log(room_width);
     updateSVGWidthAndHeight();
     remove_heatmap();
+    rescaleData();
     updateCircles();
     make_heatmap();
     updateHeatmap();
@@ -36,6 +58,7 @@ function updateDepth() {
     updateSVGWidthAndHeight();
     // console.log(room_depth);
     remove_heatmap();
+    rescaleData();
     updateCircles();
     make_heatmap();
     updateHeatmap();
@@ -77,15 +100,38 @@ function removeElement(d) {
 }
 
 function updateHeatmap() {
+    svg.selectAll("path").remove();
     svg.selectAll("rect")
         .style("fill", function(d){d.time = calculateTimeToTarget(calculateIntensity(d)); return color_scale(d.time);})
         .style("stroke", function(d){return color_scale(d.time);});
 
     updateColorBar();
+
+    var heatmap_data = [];
+    for (y = -room_depth/resolution; y < room_depth+room_depth/resolution; y+=room_depth/resolution){
+        for (x = -room_width/resolution; x < room_width+room_width/resolution; x+=room_width/resolution){    
+            heatmap_data.push(calculateTimeToTarget(calculateIntensity([x,y])));
+        }
+    }
+
+    var contours = d3.contours()
+    // .size([room_width, room_depth])
+    .size([resolution+2, resolution+2])
+    .thresholds(d3.range(0, max_time, max_time/10))
+    (heatmap_data);
+
+    console.log(contours)
+
+    svg.selectAll("path")
+        .data(contours)
+        .enter()
+        .append("path")
+        .attr("d", d3.geoPath().projection(scale()))
+        .attr("fill", "none")
+        .attr("stroke", "white");
 }
 
 function updateCircles() {
-    rescaleData();
     svg.selectAll("circle").data([]).exit().remove();
     svg.selectAll("circle")
         .data(dataset)
@@ -104,9 +150,16 @@ function updateCircles() {
 
 function rescaleData() {
     for (data of dataset) {
-        data.x = room_width * data.x/previous_width;
-        data.y = room_depth * data.y/previous_depth;
+        if (previous_width != -1) {
+            data.x = room_width * data.x/previous_width;
+        }
+        if (previous_depth != -1) {
+            data.y = room_depth * data.y/previous_depth;
+        }
     }
+
+    previous_width = -1;
+    previous_depth = -1;
 }
 
 function dragstarted(d) {
