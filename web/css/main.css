@@ -169,3 +169,13 @@ body {
     padding-right: 5%;
     padding-top: 1%;
 }
+
+.custom-file {
+  overflow: hidden;
+  padding-right: 90px;
+}
+
+.custom-file-label {
+  width:100%;
+  text-align: left;
+}

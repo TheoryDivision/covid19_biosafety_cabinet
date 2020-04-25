@@ -1,23 +1,52 @@
 function scale () {
     return d3.geoTransform({
         point: function(x, y) {
-            var new_x, new_y;
-            // if (x == 0) {
-            //     new_x = -1;
-            // } else {
-                new_x = (x-1)*(screen_width)/(resolution);
-            // }
-            // if (y == 0) {
-            //     new_y = -1;
-            //     // new_x += 10;
-            // } else {
-                new_y = (y-1)*(screen_height)/(resolution);
-            // }
+            // The -1 is because the set of values goes one index off the edge of the room on
+            // each edge so hat we don't see the corners of the contour polygons
+            new_x = (x-1)*(screen_width)/(resolution);
+            new_y = (y-1)*(screen_height)/(resolution);
 
             this.stream.point( new_x , new_y);
         }
     });
-    }
+}
+
+function saveConfigs() {
+
+    var blob = new Blob([JSON.stringify({"dataset":dataset, 
+                                         "room_width":room_width, 
+                                         "room_depth":room_depth,
+                                         "target_dose": target_dose,
+                                         "max_time": max_time
+                                        })],
+    { type: "text/plain;charset=utf-8" });
+
+    saveAs(blob, "uv_decon_room_configs.json");
+}
+
+function loadConfigs() {
+    var fileToLoad = document.getElementById("importconfig").files[0];
+    var fileReader = new FileReader();
+    fileReader.onload = function(fileLoadedEvent){
+      var textFromFileLoaded = fileLoadedEvent.target.result;
+      configs = JSON.parse(textFromFileLoaded);
+      console.log(configs);
+      document.getElementById("width_input").value = configs.room_width;
+      document.getElementById("depth_input").value = configs.room_depth;
+      document.getElementById("time_input").value = configs.max_time;
+      document.getElementById("target_input").value = configs.target_dose;
+      updateWidth();
+      updateDepth();
+      updateTarget();
+      updateMaxTime();
+      dataset = configs.dataset;
+      updateCircles();
+      updateHeatmap();
+      
+    };
+
+    fileReader.readAsText(fileToLoad, "UTF-8");
+}
 
 function updateTarget() {
     target_dose = document.getElementById("target_input").value;
@@ -120,7 +149,7 @@ function updateHeatmap() {
     .thresholds(d3.range(0, max_time, max_time/10))
     (heatmap_data);
 
-    console.log(contours)
+    // console.log(contours)
 
     svg.selectAll("path")
         .data(contours)

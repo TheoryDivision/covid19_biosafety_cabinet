@@ -91,6 +91,16 @@
                 <h1 style="text-align:center">Global Settings</h1>
 
                 <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">Import configuration: </span>
+                  </div>
+                  <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="importconfig" onchange="loadConfigs()">
+                    <label class="custom-file-label" for="importconfig">Choose file</label>
+                  </div>
+                </div>
+
+                <div class="input-group mb-3">
                     <div class="input-group-prepend">
                       <span class="input-group-text">Target dose: </span>
                     </div>
@@ -215,6 +225,8 @@
 
                 <a class="btn btn-primary" onclick="addLampFromForm()" href="#" role="button">Add lamp with these settings</a>
                 <a class="btn btn-info" onclick="clearLamps()" href="#" role="button">Remove All Lamps</a>
+                <a class="btn btn-secondary" onclick="saveConfigs()" href="#" role="button">Export configuration</a>
+
 
             </div>
           </div>
@@ -305,6 +317,7 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     <script src="d3-tip.js"></script>
+    <script src="FileSaver.min.js"></script>
     <script src="functions.js"></script>
     <script src="main.js"></script>
 </body>
